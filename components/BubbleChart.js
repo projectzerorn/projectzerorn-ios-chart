@@ -1,6 +1,7 @@
 import React, {
   Component,
-  requireNativeComponent
+  requireNativeComponent,
+  Platform
 } from 'react-native';
 
 import {
@@ -11,7 +12,9 @@ import {
 
 import { processColors } from '../utils/commonColorProps';
 
-let RNBubbleChart = requireNativeComponent('RNBubbleChartSwift', BubbleChart);
+if(Platform.OS === 'ios') {
+  var RNBubbleChart = requireNativeComponent('RNBubbleChartSwift', BubbleChart);
+}
 
 class BubbleChart extends Component {
   render() {

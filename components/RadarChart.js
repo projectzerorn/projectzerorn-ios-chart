@@ -1,7 +1,8 @@
 import React, {
   Component,
   requireNativeComponent,
-  processColor
+  processColor,
+  Platform
 } from 'react-native';
 
 import {
@@ -12,7 +13,9 @@ import {
 
 import { processColors } from '../utils/commonColorProps';
 
-let RNRadarChart = requireNativeComponent('RNRadarChartSwift', RadarChart);
+if(Platform.OS === 'ios') {
+  var RNRadarChart = requireNativeComponent('RNRadarChartSwift', RadarChart);
+}
 
 class RadarChart extends Component {
   render() {

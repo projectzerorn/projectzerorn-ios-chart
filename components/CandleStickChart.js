@@ -1,6 +1,7 @@
 import React, {
   Component,
-  requireNativeComponent
+  requireNativeComponent,
+  Platform
 } from 'react-native';
 
 import {
@@ -11,7 +12,9 @@ import {
 
 import { processColors } from '../utils/commonColorProps';
 
-let RNCandleStickChart = requireNativeComponent('RNCandleStickChartSwift', CandleStickChart);
+if(Platform.OS === 'ios') {
+  var RNCandleStickChart = requireNativeComponent('RNCandleStickChartSwift', CandleStickChart);
+}
 
 class CandleStickChart extends Component {
   render() {

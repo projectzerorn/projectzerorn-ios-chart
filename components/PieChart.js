@@ -1,7 +1,8 @@
 import React, {
   Component,
   requireNativeComponent,
-  processColor
+  processColor,
+  Platform
 } from 'react-native';
 
 import {
@@ -12,7 +13,9 @@ import {
 
 import { processColors } from '../utils/commonColorProps';
 
-let RNPieChart = requireNativeComponent('RNPieChartSwift', PieChart);
+if(Platform.OS === 'ios') {
+  var RNPieChart = requireNativeComponent('RNPieChartSwift', PieChart);
+}
 
 class PieChart extends Component {
   render() {

@@ -1,6 +1,7 @@
 import React, {
   Component,
-  requireNativeComponent
+  requireNativeComponent,
+  Platform,
 } from 'react-native';
 
 import {
@@ -11,7 +12,9 @@ import {
 
 import { processColors } from '../utils/commonColorProps';
 
-let RNBarChart = requireNativeComponent('RNBarChartSwift', BarChart);
+if(Platform.OS === 'ios') {
+    var RNBarChart = requireNativeComponent('RNBarChartSwift', BarChart);
+}
 
 class BarChart extends Component {
   render() {

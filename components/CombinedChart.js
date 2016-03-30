@@ -1,6 +1,7 @@
 import React, {
   Component,
-  requireNativeComponent
+  requireNativeComponent,
+  Platform
 } from 'react-native';
 
 import {
@@ -11,7 +12,9 @@ import {
 
 import { processColors } from '../utils/commonColorProps';
 
-let RNCombinedChart = requireNativeComponent('RNCombinedChartSwift', CombinedChart);
+if(Platform.OS === 'ios') {
+  var RNCombinedChart = requireNativeComponent('RNCombinedChartSwift', CombinedChart);
+}
 
 class CombinedChart extends Component {
   render() {

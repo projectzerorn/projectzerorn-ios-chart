@@ -1,7 +1,8 @@
 import React, {
   Component,
   requireNativeComponent,
-  processColor
+  processColor,
+  Platform
 } from 'react-native';
 
 import {
@@ -12,7 +13,9 @@ import {
 
 import { processColors } from '../utils/commonColorProps';
 
-let RNLineChart = requireNativeComponent('RNLineChartSwift', LineChart);
+if(Platform.OS === 'ios') {
+  var RNLineChart = requireNativeComponent('RNLineChartSwift', LineChart);
+}
 
 class LineChart extends Component {
   render() {

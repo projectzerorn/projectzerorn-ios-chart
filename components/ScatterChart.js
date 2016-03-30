@@ -1,6 +1,7 @@
 import React, {
   Component,
-  requireNativeComponent
+  requireNativeComponent,
+  Platform
 } from 'react-native';
 
 import {
@@ -11,7 +12,9 @@ import {
 
 import { processColors } from '../utils/commonColorProps';
 
-let RNScatterChart = requireNativeComponent('RNScatterChartSwift', ScatterChart);
+if(Platform.OS === 'ios') {
+  var RNScatterChart = requireNativeComponent('RNScatterChartSwift', ScatterChart);
+}
 
 class ScatterChart extends Component {
   render() {
