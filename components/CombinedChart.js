@@ -49,7 +49,6 @@ CombinedChart.propTypes = {
         highlightLineWidth: React.PropTypes.number,
         lineDashLengths: React.PropTypes.number,
         lineDashPhase: React.PropTypes.number,
-        lineWidth: React.PropTypes.number
       }))
     }),
     barData: React.PropTypes.shape({
