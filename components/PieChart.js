@@ -41,7 +41,7 @@ PieChart.propTypes = {
     holeTransparent: React.PropTypes.bool,
     holeAlpha: React.PropTypes.number,
     drawHoleEnabled: React.PropTypes.bool,
-    centerText: React.PropTypes.string,
+    centerText: React.PropTypes.array,
     drawCenterTextEnabled: React.PropTypes.bool,
     holeRadiusPercent: React.PropTypes.number,
     transparentCircleRadiusPercent: React.PropTypes.number,
