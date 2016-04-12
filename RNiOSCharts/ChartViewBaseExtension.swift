@@ -104,6 +104,10 @@ extension ChartViewBase {
         }
 
         if json["legend"].isExists() {
+            if json["legend"]["enable"].isExists() {
+              self.legend.enabled = json["legend"]["enable"].boolValue;
+            }
+          
             if json["legend"]["textColor"].isExists() {
                 self.legend.textColor = RCTConvert.UIColor(json["legend"]["textColor"].intValue);
             }

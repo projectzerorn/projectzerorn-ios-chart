@@ -49,7 +49,14 @@ class RNBarChart : BarChartView {
         if json["drawBarShadow"].isExists() {
             self.drawBarShadowEnabled = json["drawBarShadow"].boolValue;
         }
-        
+        if json["scaleEnabled"].isExists() {
+            self.scaleXEnabled = json["scaleEnabled"].boolValue;
+            self.scaleYEnabled = json["scaleEnabled"].boolValue;
+        }
+      
+        if json["touchEnabled"].isExists() {
+          self.userInteractionEnabled = json["touchEnabled"].boolValue;
+        }
     }
     
 }

@@ -42,11 +42,49 @@ class RNPieChart : PieChartView {
     }
 
     if json["centerText"].isExists() {
-      self.centerText = json["centerText"].stringValue;
+      let paraStyle = NSMutableParagraphStyle();
+      paraStyle.alignment = NSTextAlignment.Center;//居中属性
+      
+      let centerTextSets = json["centerText"].arrayObject;
+      let centerText = NSMutableAttributedString.init();
+      for set in centerTextSets!{
+        let tmp = JSON(set);
+        let tempText = tmp["text"].stringValue;
+        let color = tmp["color"].stringValue;
+        let size = tmp["size"].intValue;
+        let isWrap = tmp["isWrap"].boolValue;
+        
+        
+        if(isWrap){//换行
+          centerText.appendAttributedString(NSAttributedString.init(string: "\n"));
+        }
+        
+        //文字
+        let tempTextWithAttrib  = NSAttributedString.init(string: tempText,
+                                                          attributes: [
+                                                            NSParagraphStyleAttributeName: paraStyle,
+                                                            NSForegroundColorAttributeName: UIColor(rgba: color).CGColor,
+                                                            NSFontAttributeName: UIFont.systemFontOfSize(CGFloat(size) / CGFloat(3.1753))
+                                                          ]);
+        centerText.appendAttributedString(tempTextWithAttrib);
+      }
+      
+      self.centerAttributedText = centerText;
     }
+    
+    
 
     if json["drawCenterTextEnabled"].isExists() {
       self.drawCenterTextEnabled = json["drawCenterTextEnabled"].boolValue;
+    }
+    
+    if json["holeRadius"].isExists() {
+      self.holeRadiusPercent = CGFloat(json["holeRadius"].floatValue / 100.0);
+      if json["holeRadius"].floatValue == 0 {
+        self.transparentCircleRadiusPercent = 0;
+      }else{
+        self.transparentCircleRadiusPercent = self.holeRadiusPercent + 0.05;
+      }
     }
     
     if json["holeRadiusPercent"].isExists() {
@@ -55,6 +93,12 @@ class RNPieChart : PieChartView {
     
     if json["transparentCircleRadiusPercent"].isExists() {
       self.transparentCircleRadiusPercent = CGFloat(json["transparentCircleRadiusPercent"].floatValue);
+    }
+    
+    if json["hasHoleFrame"].isExists() {
+      if !json["hasHoleFrame"].boolValue {
+        self.transparentCircleRadiusPercent = self.holeRadiusPercent;
+      }
     }
     
     if json["drawSliceTextEnabled"].isExists() {
@@ -132,84 +176,41 @@ class RNPieChart : PieChartView {
             dataSet.valueTextColor = RCTConvert.UIColor(tmp["valueTextColor"].intValue);
           }
           
-          if json["valueFormatter"].isExists() {
-            if json["valueFormatter"]["minimumDecimalPlaces"].isExists() {
-              minimumDecimalPlaces = json["valueFormatter"]["minimumDecimalPlaces"].intValue;
-            }
-            if json["valueFormatter"]["maximumDecimalPlaces"].isExists() {
-              maximumDecimalPlaces = json["valueFormatter"]["maximumDecimalPlaces"].intValue;
-            }
-            
-            if json["valueFormatter"]["type"].isExists() {
-              switch(json["valueFormatter"]["type"]) {
-              case "regular":
-                dataSet.valueFormatter = NSNumberFormatter();
-                break;
-              case "abbreviated":
-                dataSet.valueFormatter = ABNumberFormatter(minimumDecimalPlaces: minimumDecimalPlaces, maximumDecimalPlaces: maximumDecimalPlaces);
-                break;
-              default:
-                dataSet.valueFormatter = NSNumberFormatter();
-              }
-            }
-            
-            if json["valueFormatter"]["numberStyle"].isExists() {
-              switch(json["valueFormatter"]["numberStyle"]) {
-              case "CurrencyAccountingStyle":
-                if #available(iOS 9.0, *) {
-                  dataSet.valueFormatter?.numberStyle = .CurrencyAccountingStyle;
-                }
-                break;
-              case "CurrencyISOCodeStyle":
-                if #available(iOS 9.0, *) {
-                  dataSet.valueFormatter?.numberStyle = .CurrencyISOCodeStyle;
-                }
-                break;
-              case "CurrencyPluralStyle":
-                if #available(iOS 9.0, *) {
-                  dataSet.valueFormatter?.numberStyle = .CurrencyPluralStyle;
-                }
-                break;
-              case "CurrencyStyle":
-                dataSet.valueFormatter?.numberStyle = .CurrencyStyle;
-                break;
-              case "DecimalStyle":
-                dataSet.valueFormatter?.numberStyle = .DecimalStyle;
-                break;
-              case "NoStyle":
-                dataSet.valueFormatter?.numberStyle = .NoStyle;
-                break;
-              case "OrdinalStyle":
-                if #available(iOS 9.0, *) {
-                  dataSet.valueFormatter?.numberStyle = .OrdinalStyle;
-                }
-                break;
-              case "PercentStyle":
-                dataSet.valueFormatter?.numberStyle = .PercentStyle;
-                break;
-              case "ScientificStyle":
-                dataSet.valueFormatter?.numberStyle = .ScientificStyle;
-                break;
-              case "SpellOutStyle":
-                dataSet.valueFormatter?.numberStyle = .SpellOutStyle;
-                break;
-              default:
-                dataSet.valueFormatter?.numberStyle = .NoStyle;
-              }
-            }
-            
-            dataSet.valueFormatter?.minimumFractionDigits = minimumDecimalPlaces;
-            dataSet.valueFormatter?.maximumFractionDigits = maximumDecimalPlaces;
-          }
+          let nf = NSNumberFormatter();
+          nf.numberStyle = NSNumberFormatterStyle.DecimalStyle;
+          nf.maximumFractionDigits = 0;//保留0位小数
+          dataSet.valueFormatter = nf;
           
           sets.append(dataSet);
         }
       }
       
       let chartData = PieChartData(xVals: labels, dataSets: sets);
+      self.rotationEnabled = false; // 不可以手动旋转
+      
       self.data = chartData;
+      
+      if json["hasAnimate"].isExists() {
+        if json["hasAnimate"].boolValue {
+          self.spin(duration: 1, fromAngle: self.rotationAngle+90, toAngle: self.rotationAngle+360);
+          self.animate(yAxisDuration: 1, easing: {
+            (elapsed: NSTimeInterval, duration: NSTimeInterval) -> CGFloat in
+            var position = CGFloat(elapsed / (duration / 2.0))
+            if (position < 1.0){
+              return 0.5 * position * position
+            }
+            return -0.5 * ((--position) * (position - 2.0) - 1.0)
+            }
+          );
+        }
+      }
+      
+      if json["touchEnabled"].isExists() {
+        self.userInteractionEnabled = json["touchEnabled"].boolValue;
+      }
+      
+      
     }
-    
   }
   
 }

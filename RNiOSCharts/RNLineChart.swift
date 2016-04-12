@@ -44,5 +44,14 @@ class RNLineChart : LineChartView {
         if json["drawMarkers"].isExists() {
           self.drawMarkers = json["drawMarkers"].boolValue;
         }
+      
+        if json["scaleEnabled"].isExists() {
+          self.scaleXEnabled = json["scaleEnabled"].boolValue;
+          self.scaleYEnabled = json["scaleEnabled"].boolValue;
+        }
+      
+        if json["touchEnabled"].isExists() {
+          self.userInteractionEnabled = json["touchEnabled"].boolValue;
+        }
     }
 }
