@@ -1,6 +1,6 @@
 {
-  "name": "projectzerorn-ios-charts",
-  "version": "0.2.2",
+  "name": "projectzerorn-ios-chart",
+  "version": "0.2.3",
   "main": "index.js",
   "repository": {
     "type": "git",
