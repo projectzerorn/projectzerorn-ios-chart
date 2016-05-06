@@ -283,5 +283,10 @@ export const pieRadarCommonProps = {
   rotationEnabled: React.PropTypes.bool,
   rotationAngle: React.PropTypes.number,
   rotationWithTwoFingers: React.PropTypes.bool,
-  minOffset: React.PropTypes.number
+  minOffset: React.PropTypes.number,
+  xAxis: React.PropTypes.shape({
+    enabled: React.PropTypes.bool,
+    textColor: React.PropTypes.string,
+    textSize: React.PropTypes.number,
+    }),
 };

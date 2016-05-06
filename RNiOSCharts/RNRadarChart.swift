@@ -37,6 +37,14 @@ class RNRadarChart : RadarChartView {
       labels = json["labels"].arrayObject as! [String];
     }
     
+    //文字超长使用...替换
+    for i in 0..<labels.count {
+      let label = labels[i] as NSString;
+      if(label.length > 6){
+        labels[i] = label.substringToIndex(6) + "...";
+      }
+    }
+    
     if json["dataSets"].isExists() {
       let dataSets = json["dataSets"].arrayObject;
       
@@ -186,11 +194,11 @@ class RNRadarChart : RadarChartView {
       }
 
       if json["webColor"].isExists() {
-        self.webColor = RCTConvert.UIColor(json["webColor"].intValue);
+        self.webColor = UIColor(rgba:json["webColor"].stringValue);
       }
       
       if json["innerWebColor"].isExists() {
-        self.innerWebColor = RCTConvert.UIColor(json["innerWebColor"].intValue);
+        self.innerWebColor = UIColor(rgba:json["innerWebColor"].stringValue);
       }
       
       if json["webAlpha"].isExists() {
@@ -204,6 +212,27 @@ class RNRadarChart : RadarChartView {
       if json["skipWebLineCount"].isExists() {
         self.skipWebLineCount = json["skipWebLineCount"].intValue;
       }
+      
+      self.yAxis.startAtZeroEnabled = true;//蛛网由0开始
+      self.yAxis.enabled = false;//去掉刻度数值显示
+      if json["webCount"].isExists() {//蛛网层数
+        self.yAxis.labelCount = json["webCount"].intValue - 1;
+      }
+      
+      if json["touchEnabled"].isExists() {
+        self.userInteractionEnabled = json["touchEnabled"].boolValue;
+      }
+      
+      if json["xAxis"].isExists(){
+        if json["xAxis"]["textColor"].isExists(){
+          self.xAxis.labelTextColor = RCTConvert.UIColor(json["xAxis"]["textColor"].intValue);
+        }
+        if json["xAxis"]["textSize"].isExists(){
+          let textSize = json["xAxis"]["textSize"].floatValue
+          self.xAxis.labelFont = NSUIFont.systemFontOfSize(CGFloat(textSize) / CGFloat(3.1753));
+        }
+      }
+      
       
     }
   }

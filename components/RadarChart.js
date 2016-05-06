@@ -44,7 +44,8 @@ RadarChart.propTypes = {
     innerWebColor: React.PropTypes.string,
     webAlpha: React.PropTypes.number,
     drawWeb: React.PropTypes.bool,
-    skipWebLineCount: React.PropTypes.number
+    skipWebLineCount: React.PropTypes.number,
+    webCount: React.PropTypes.number
   })
 };
 
