@@ -1,7 +1,10 @@
 import React, {
-  Component,
-  requireNativeComponent,
-  Platform
+    Component
+} from 'react';
+
+import {
+    requireNativeComponent,
+    Platform,
 } from 'react-native';
 
 import {

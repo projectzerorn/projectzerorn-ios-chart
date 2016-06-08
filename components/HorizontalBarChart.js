@@ -1,9 +1,13 @@
 import React, {
-  Component,
-  requireNativeComponent,
-  processColor,
-  Platform
+    Component
+} from 'react';
+
+import {
+    requireNativeComponent,
+    processColor,
+    Platform,
 } from 'react-native';
+
 
 import {
   globalCommonProps,
