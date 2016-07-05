@@ -33,9 +33,10 @@ class RNPieChart : PieChartView {
       json = JSON(data: data);
     };
 
-    if json["holeColor"].isExists() {
-      self.holeColor = RCTConvert.UIColor(json["holeColor"].intValue);
-    }
+    self.holeColor = UIColor.clearColor();
+//    if json["holeColor"].isExists() {
+//      self.holeColor = RCTConvert.UIColor(json["holeColor"].intValue);
+//    }
     
     if json["drawHoleEnabled"].isExists() {
       self.drawHoleEnabled = json["drawHoleEnabled"].boolValue;
