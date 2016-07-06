@@ -149,6 +149,14 @@ class RNPieChart : PieChartView {
             dataSet.selectionShift = CGFloat(tmp["selectionShift"].floatValue);
           }
           
+          if tmp["selected"].isExists(){//高亮选中
+              var hightlightedList: [ChartHighlight] = [];
+              let selectedArray = tmp["selected"].arrayObject as! [Int];
+              for j in 0..<selectedArray.count{
+                  hightlightedList.append(ChartHighlight.init(xIndex: selectedArray[j], dataSetIndex: 0));
+              }
+              self.highlightValues(hightlightedList);
+          }
           if tmp["colors"].isExists() {
             let arrColors = tmp["colors"].arrayObject as! [Int];
             dataSet.colors = arrColors.map({return RCTConvert.UIColor($0)});
