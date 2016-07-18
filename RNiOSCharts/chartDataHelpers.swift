@@ -98,6 +98,13 @@ func getLineData(labels: [String], json: JSON!) -> LineChartData {
         dataSet.fillColor = RCTConvert.UIColor(tmp["fillColor"].intValue);
       }
       
+      if (tmp["fillColorTop"].isExists() && tmp["fillColorBottom"].isExists()){
+        let startColor = UIColor(rgba: tmp["fillColorBottom"].stringValue);
+        let endColor = UIColor(rgba: tmp["fillColorTop"].stringValue);
+        let colors: CFArray = [startColor.CGColor, endColor.CGColor];
+        let gradient = CGGradientCreateWithColors(CGColorSpaceCreateDeviceRGB(), colors, [0,1]);
+        dataSet.fill = ChartFill.fillWithLinearGradient(gradient!, angle: 90.0);
+      }
       if tmp["highlightColor"].isExists() {
         dataSet.highlightColor = RCTConvert.UIColor(tmp["highlightColor"].intValue);
       }
