@@ -157,6 +157,7 @@ class RNPieChart : PieChartView {
               }
               self.highlightValues(hightlightedList);
           }
+          
           if tmp["colors"].isExists() {
             let arrColors = tmp["colors"].arrayObject as! [Int];
             dataSet.colors = arrColors.map({return RCTConvert.UIColor($0)});
@@ -185,10 +186,15 @@ class RNPieChart : PieChartView {
             dataSet.valueTextColor = RCTConvert.UIColor(tmp["valueTextColor"].intValue);
           }
           
-          let nf = NSNumberFormatter();
-          nf.numberStyle = NSNumberFormatterStyle.DecimalStyle;
-          nf.maximumFractionDigits = 0;//保留0位小数
-          dataSet.valueFormatter = nf;
+          if tmp["isShowValuesPercent"].isExists() && tmp["isShowValuesPercent"].boolValue{
+            //百分比显示数据  数据会在js端处理计算好
+            dataSet.valueFormatter?.numberStyle = .PercentStyle;
+          }else{
+            let nf = NSNumberFormatter();
+            nf.numberStyle = NSNumberFormatterStyle.DecimalStyle;
+            nf.maximumFractionDigits = 0;//保留0位小数
+            dataSet.valueFormatter = nf;
+          }
           
           sets.append(dataSet);
         }
