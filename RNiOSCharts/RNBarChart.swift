@@ -63,8 +63,23 @@ class RNBarChart : BarChartView {
         if json["touchEnabled"].isExists() {
           self.userInteractionEnabled = json["touchEnabled"].boolValue;
         }
-        if json["xAxis"].isExists() && json["xAxis"]["labelsToSkip"]{
+      
+        if json["xAxis"].isExists() && json["xAxis"]["labelsToSkip"].isExists(){
           self.xAxis.setLabelsToSkip(json["xAxis"]["labelsToSkip"].intValue);
+        }
+      
+        if json["leftAxis"].isExists() && json["leftAxis"]["unitLabel"].isExists(){
+          let unitFormatter = NSNumberFormatter();
+          unitFormatter.numberStyle = .NoStyle;
+          unitFormatter.positiveFormat = "#" + json["leftAxis"]["unitLabel"].stringValue;
+          self.leftAxis.valueFormatter = unitFormatter;
+        }
+      
+        if json["rightAxis"].isExists() && json["rightAxis"]["unitLabel"].isExists(){
+          let unitFormatter = NSNumberFormatter();
+          unitFormatter.numberStyle = .NoStyle;
+          unitFormatter.positiveFormat = "#" + json["rightAxis"]["unitLabel"].stringValue;
+          self.rightAxis.valueFormatter = unitFormatter;
         }
     }
   
