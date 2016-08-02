@@ -53,5 +53,8 @@ class RNLineChart : LineChartView {
         if json["touchEnabled"].isExists() {
           self.userInteractionEnabled = json["touchEnabled"].boolValue;
         }
+        if json["xAxis"].isExists() && json["xAxis"]["labelsToSkip"]{
+          self.xAxis.setLabelsToSkip(json["xAxis"]["labelsToSkip"].intValue);
+        }
     }
 }
