@@ -200,7 +200,13 @@ class RNPieChart : PieChartView {
             
             dataSet.valueFormatter = nf;
           }else{
-            let nf = NSNumberFormatter();
+            var nf : NSNumberFormatter;
+            nf = HideZeroFormatter();//默认不显示0
+            
+            if tmp["isShowZero"].isExists() && tmp["isShowZero"].boolValue{
+              nf = NSNumberFormatter();
+            }
+            
             nf.numberStyle = NSNumberFormatterStyle.DecimalStyle;
             nf.maximumFractionDigits = 0;//保留0位小数
             dataSet.valueFormatter = nf;
