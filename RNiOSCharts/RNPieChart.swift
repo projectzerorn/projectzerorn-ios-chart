@@ -188,7 +188,17 @@ class RNPieChart : PieChartView {
           
           if tmp["isShowValuesPercent"].isExists() && tmp["isShowValuesPercent"].boolValue{
             //百分比显示数据  数据会在js端处理计算好
-            dataSet.valueFormatter?.numberStyle = .PercentStyle;
+            var nf : NSNumberFormatter;
+            nf = HideZeroFormatter();//默认不显示0
+            
+            if tmp["isShowZero"].isExists() && tmp["isShowZero"].boolValue{
+              nf = NSNumberFormatter();
+            }
+            
+            nf.numberStyle = NSNumberFormatterStyle.PercentStyle;
+            nf.maximumFractionDigits = 1;//保留1位小数
+            
+            dataSet.valueFormatter = nf;
           }else{
             let nf = NSNumberFormatter();
             nf.numberStyle = NSNumberFormatterStyle.DecimalStyle;
@@ -228,4 +238,16 @@ class RNPieChart : PieChartView {
     }
   }
   
+}
+
+class HideZeroFormatter: NSNumberFormatter {
+  override func stringFromNumber(number: NSNumber) -> String? {
+    var ret : String;
+    if(number == 0){
+      ret = "";
+    }else{
+      ret = super.stringFromNumber(number)!;
+    }
+    return ret;
+  }
 }
