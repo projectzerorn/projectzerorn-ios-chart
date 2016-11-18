@@ -21,7 +21,7 @@ class RNPieChart : PieChartView {
     fatalError("init(coder:) has not been implemented");
   }
   
-  func setConfig(config: String!) {
+  func setConfig(_ config: String!) {
     setPieRadarChartViewBaseProps(config);
     
     var maximumDecimalPlaces: Int = 0;
@@ -29,22 +29,22 @@ class RNPieChart : PieChartView {
     var labels: [String] = [];
     
     var json: JSON = nil;
-    if let data = config.dataUsingEncoding(NSUTF8StringEncoding) {
+    if let data = config.data(using: String.Encoding.utf8) {
       json = JSON(data: data);
     };
 
-    self.holeColor = UIColor.clearColor();
-//    if json["holeColor"].isExists() {
+    self.holeColor = UIColor.clear;
+//    if json["holeColor"].exists() {
 //      self.holeColor = RCTConvert.UIColor(json["holeColor"].intValue);
 //    }
     
-    if json["drawHoleEnabled"].isExists() {
+    if json["drawHoleEnabled"].exists() {
       self.drawHoleEnabled = json["drawHoleEnabled"].boolValue;
     }
 
-    if json["centerText"].isExists() {
+    if json["centerText"].exists() {
       let paraStyle = NSMutableParagraphStyle();
-      paraStyle.alignment = NSTextAlignment.Center;//居中属性
+      paraStyle.alignment = NSTextAlignment.center;//居中属性
       
       let centerTextSets = json["centerText"].arrayObject;
       let centerText = NSMutableAttributedString.init();
@@ -57,17 +57,17 @@ class RNPieChart : PieChartView {
         
         
         if(isWrap){//换行
-          centerText.appendAttributedString(NSAttributedString.init(string: "\n"));
+          centerText.append(NSAttributedString.init(string: "\n"));
         }
         
         //文字
         let tempTextWithAttrib  = NSAttributedString.init(string: tempText,
                                                           attributes: [
                                                             NSParagraphStyleAttributeName: paraStyle,
-                                                            NSForegroundColorAttributeName: UIColor(rgba: color).CGColor,
-                                                            NSFontAttributeName: UIFont.systemFontOfSize(CGFloat(size) / CGFloat(3.1753))
+                                                            NSForegroundColorAttributeName: UIColor(color).cgColor,
+                                                            NSFontAttributeName: UIFont.systemFont(ofSize: CGFloat(size) / CGFloat(3.1753))
                                                           ]);
-        centerText.appendAttributedString(tempTextWithAttrib);
+        centerText.append(tempTextWithAttrib);
       }
       
       self.centerAttributedText = centerText;
@@ -75,11 +75,11 @@ class RNPieChart : PieChartView {
     
     
 
-    if json["drawCenterTextEnabled"].isExists() {
+    if json["drawCenterTextEnabled"].exists() {
       self.drawCenterTextEnabled = json["drawCenterTextEnabled"].boolValue;
     }
     
-    if json["holeRadius"].isExists() {
+    if json["holeRadius"].exists() {
       self.holeRadiusPercent = CGFloat(json["holeRadius"].floatValue / 100.0);
       if json["holeRadius"].floatValue == 0 {
         self.transparentCircleRadiusPercent = 0;
@@ -88,50 +88,50 @@ class RNPieChart : PieChartView {
       }
     }
     
-    if json["holeRadiusPercent"].isExists() {
+    if json["holeRadiusPercent"].exists() {
       self.holeRadiusPercent = CGFloat(json["holeRadiusPercent"].floatValue);
     }
     
-    if json["transparentCircleRadiusPercent"].isExists() {
+    if json["transparentCircleRadiusPercent"].exists() {
       self.transparentCircleRadiusPercent = CGFloat(json["transparentCircleRadiusPercent"].floatValue);
     }
     
-    if json["hasHoleFrame"].isExists() {
+    if json["hasHoleFrame"].exists() {
       if !json["hasHoleFrame"].boolValue {
         self.transparentCircleRadiusPercent = self.holeRadiusPercent;
       }
     }
     
-    if json["drawSliceTextEnabled"].isExists() {
+    if json["drawSliceTextEnabled"].exists() {
       self.drawSliceTextEnabled = json["drawSliceTextEnabled"].boolValue;
     }
     
-    if json["usePercentValuesEnabled"].isExists() {
+    if json["usePercentValuesEnabled"].exists() {
       self.usePercentValuesEnabled = json["usePercentValuesEnabled"].boolValue;
     }
     
-    if json["centerTextRadiusPercent"].isExists() {
+    if json["centerTextRadiusPercent"].exists() {
       self.centerTextRadiusPercent = CGFloat(json["centerTextRadiusPercent"].floatValue);
     }
     
-    if json["maxAngle"].isExists() {
+    if json["maxAngle"].exists() {
       self.maxAngle = CGFloat(json["maxAngle"].floatValue);
     }
     
-    if json["labels"].isExists() {
+    if json["labels"].exists() {
       labels = json["labels"].arrayObject as! [String];
     }
     
-    if json["dataSets"].isExists() {
+    if json["dataSets"].exists() {
       let dataSets = json["dataSets"].arrayObject;
       
       var sets: [PieChartDataSet] = [];
       
       for set in dataSets! {
         let tmp = JSON(set);
-        if tmp["values"].isExists() {
+        if tmp["values"].exists() {
           let values = tmp["values"].arrayObject as! [Double];
-          let label = tmp["label"].isExists() ? tmp["label"].stringValue : "";
+          let label = tmp["label"].exists() ? tmp["label"].stringValue : "";
           var dataEntries: [ChartDataEntry] = [];
           
           for i in 0..<values.count {
@@ -141,15 +141,15 @@ class RNPieChart : PieChartView {
           
           let dataSet = PieChartDataSet(yVals: dataEntries, label: label);
           
-          if tmp["sliceSpace"].isExists() {
+          if tmp["sliceSpace"].exists() {
             dataSet.sliceSpace = CGFloat(tmp["sliceSpace"].floatValue);
           }
           
-          if tmp["selectionShift"].isExists() {
+          if tmp["selectionShift"].exists() {
             dataSet.selectionShift = CGFloat(tmp["selectionShift"].floatValue);
           }
           
-          if tmp["selected"].isExists(){//高亮选中
+          if tmp["selected"].exists(){//高亮选中
               var hightlightedList: [ChartHighlight] = [];
               let selectedArray = tmp["selected"].arrayObject as! [Int];
               for j in 0..<selectedArray.count{
@@ -158,56 +158,56 @@ class RNPieChart : PieChartView {
               self.highlightValues(hightlightedList);
           }
           
-          if tmp["colors"].isExists() {
+          if tmp["colors"].exists() {
             let arrColors = tmp["colors"].arrayObject as! [Int];
-            dataSet.colors = arrColors.map({return RCTConvert.UIColor($0)});
+            dataSet.colors = arrColors.map({return RCTConvert.uiColor($0)});
           }
           
-          if tmp["drawValues"].isExists() {
+          if tmp["drawValues"].exists() {
             dataSet.drawValuesEnabled = tmp["drawValues"].boolValue;
           }
           
-          if tmp["highlightEnabled"].isExists() {
+          if tmp["highlightEnabled"].exists() {
             dataSet.highlightEnabled = tmp["highlightEnabled"].boolValue;
           }
           
-          if tmp["valueTextFontName"].isExists() {
+          if tmp["valueTextFontName"].exists() {
             dataSet.valueFont = UIFont(
               name: tmp["valueTextFontName"].stringValue,
               size: dataSet.valueFont.pointSize
               )!;
           }
           
-          if tmp["valueTextFontSize"].isExists() {
-            dataSet.valueFont = dataSet.valueFont.fontWithSize(CGFloat(tmp["valueTextFontSize"].floatValue))
+          if tmp["valueTextFontSize"].exists() {
+            dataSet.valueFont = dataSet.valueFont.withSize(CGFloat(tmp["valueTextFontSize"].floatValue))
           }
           
-          if tmp["valueTextColor"].isExists() {
-            dataSet.valueTextColor = RCTConvert.UIColor(tmp["valueTextColor"].intValue);
+          if tmp["valueTextColor"].exists() {
+            dataSet.valueTextColor = RCTConvert.uiColor(tmp["valueTextColor"].intValue);
           }
           
-          if tmp["isShowValuesPercent"].isExists() && tmp["isShowValuesPercent"].boolValue{
+          if tmp["isShowValuesPercent"].exists() && tmp["isShowValuesPercent"].boolValue{
             //百分比显示数据  数据会在js端处理计算好
-            var nf : NSNumberFormatter;
+            var nf : NumberFormatter;
             nf = HideZeroFormatter();//默认不显示0
             
-            if tmp["isShowZero"].isExists() && tmp["isShowZero"].boolValue{
-              nf = NSNumberFormatter();
+            if tmp["isShowZero"].exists() && tmp["isShowZero"].boolValue{
+              nf = NumberFormatter();
             }
             
-            nf.numberStyle = NSNumberFormatterStyle.PercentStyle;
+            nf.numberStyle = .percent;
             nf.maximumFractionDigits = 1;//保留1位小数
             
             dataSet.valueFormatter = nf;
           }else{
-            var nf : NSNumberFormatter;
+            var nf : NumberFormatter;
             nf = HideZeroFormatter();//默认不显示0
             
-            if tmp["isShowZero"].isExists() && tmp["isShowZero"].boolValue{
-              nf = NSNumberFormatter();
+            if tmp["isShowZero"].exists() && tmp["isShowZero"].boolValue{
+              nf = NumberFormatter();
             }
             
-            nf.numberStyle = NSNumberFormatterStyle.DecimalStyle;
+            nf.numberStyle = .decimal;
             nf.maximumFractionDigits = 0;//保留0位小数
             dataSet.valueFormatter = nf;
           }
@@ -221,23 +221,24 @@ class RNPieChart : PieChartView {
       
       self.data = chartData;
       
-      if json["hasAnimate"].isExists() {
+      if json["hasAnimate"].exists() {
         if json["hasAnimate"].boolValue {
           self.spin(duration: 1, fromAngle: self.rotationAngle+90, toAngle: self.rotationAngle+360);
           self.animate(yAxisDuration: 1, easing: {
-            (elapsed: NSTimeInterval, duration: NSTimeInterval) -> CGFloat in
+            (elapsed: TimeInterval, duration: TimeInterval) -> CGFloat in
             var position = CGFloat(elapsed / (duration / 2.0))
             if (position < 1.0){
               return 0.5 * position * position
             }
-            return -0.5 * ((--position) * (position - 2.0) - 1.0)
+            position = position - 1;
+            return -0.5 * (position * (position - 2.0) - 1.0)
             }
           );
         }
       }
       
-      if json["touchEnabled"].isExists() {
-        self.userInteractionEnabled = json["touchEnabled"].boolValue;
+      if json["touchEnabled"].exists() {
+        self.isUserInteractionEnabled = json["touchEnabled"].boolValue;
       }
       
       
@@ -246,13 +247,13 @@ class RNPieChart : PieChartView {
   
 }
 
-class HideZeroFormatter: NSNumberFormatter {
-  override func stringFromNumber(number: NSNumber) -> String? {
+class HideZeroFormatter: NumberFormatter {
+  override func string(from number: NSNumber) -> String? {
     var ret : String;
     if(number == 0){
       ret = "";
     }else{
-      ret = super.stringFromNumber(number)!;
+      ret = super.string(from: number)!;
     }
     return ret;
   }

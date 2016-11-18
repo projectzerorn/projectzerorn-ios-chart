@@ -21,21 +21,21 @@ class RNBarChart : BarChartView {
         fatalError("init(coder:) has not been implemented");
     }
     
-    func setConfig(config: String!) {
+    func setConfig(_ config: String!) {
         setBarLineChartViewBaseProps(config);
       
         var labels: [String] = [];
         
         var json: JSON = nil;
-        if let data = config.dataUsingEncoding(NSUTF8StringEncoding) {
+        if let data = config.data(using: String.Encoding.utf8) {
             json = JSON(data: data);
         };
         
-        if json["labels"].isExists() {
+        if json["labels"].exists() {
             labels = json["labels"].arrayObject as! [String];
         }
       
-        if (json["isStacked"].isExists() && json["isStacked"].boolValue){
+        if (json["isStacked"].exists() && json["isStacked"].boolValue){
             self.data = getStackedBarData(labels, json: json);
         }else{
             self.data = getBarData(labels, json: json);
@@ -44,47 +44,47 @@ class RNBarChart : BarChartView {
       
       
         
-        if json["drawValueAboveBar"].isExists() {
+        if json["drawValueAboveBar"].exists() {
             self.drawValueAboveBarEnabled = json["drawValueAboveBar"].boolValue;
         }
         
-        if json["drawHighlightArrow"].isExists() {
+        if json["drawHighlightArrow"].exists() {
             self.drawHighlightArrowEnabled = json["drawHighlightArrow"].boolValue;
         }
         
-        if json["drawBarShadow"].isExists() {
+        if json["drawBarShadow"].exists() {
             self.drawBarShadowEnabled = json["drawBarShadow"].boolValue;
         }
-        if json["scaleEnabled"].isExists() {
+        if json["scaleEnabled"].exists() {
             self.scaleXEnabled = json["scaleEnabled"].boolValue;
             self.scaleYEnabled = json["scaleEnabled"].boolValue;
         }
       
-        if json["touchEnabled"].isExists() {
-          self.userInteractionEnabled = json["touchEnabled"].boolValue;
+        if json["touchEnabled"].exists() {
+          self.isUserInteractionEnabled = json["touchEnabled"].boolValue;
         }
       
-        if json["xAxis"].isExists() && json["xAxis"]["labelsToSkip"].isExists(){
+        if json["xAxis"].exists() && json["xAxis"]["labelsToSkip"].exists(){
           self.xAxis.setLabelsToSkip(json["xAxis"]["labelsToSkip"].intValue);
         }
       
-        if json["leftAxis"].isExists() && json["leftAxis"]["unitLabel"].isExists(){
-          let unitFormatter = NSNumberFormatter();
-          unitFormatter.numberStyle = .NoStyle;
+        if json["leftAxis"].exists() && json["leftAxis"]["unitLabel"].exists(){
+          let unitFormatter = NumberFormatter();
+          unitFormatter.numberStyle = .none;
           unitFormatter.positiveFormat = "#" + json["leftAxis"]["unitLabel"].stringValue;
           self.leftAxis.valueFormatter = unitFormatter;
         }
       
-        if json["rightAxis"].isExists() && json["rightAxis"]["unitLabel"].isExists(){
-          let unitFormatter = NSNumberFormatter();
-          unitFormatter.numberStyle = .NoStyle;
+        if json["rightAxis"].exists() && json["rightAxis"]["unitLabel"].exists(){
+          let unitFormatter = NumberFormatter();
+          unitFormatter.numberStyle = .none;
           unitFormatter.positiveFormat = "#" + json["rightAxis"]["unitLabel"].stringValue;
           self.rightAxis.valueFormatter = unitFormatter;
         }
     }
   
-    func getStackedBarData(labels: [String], json: JSON!) -> BarChartData {
-      if !json["dataSets"].isExists() {
+    func getStackedBarData(_ labels: [String], json: JSON!) -> BarChartData {
+      if !json["dataSets"].exists() {
         return BarChartData();
       }
       
@@ -100,16 +100,16 @@ class RNBarChart : BarChartView {
       for i in 0 ..< json["dataSets"][0]["values"].count {
           for j in 0 ..< json["dataSets"].count{
               list[i].stackedBarData.append(json["dataSets"][j]["values"][i].doubleValue);
-              list[i].stackedBarColors.append(RCTConvert.UIColor(json["dataSets"][j]["colors"][0].intValue));
+              list[i].stackedBarColors.append(RCTConvert.uiColor(json["dataSets"][j]["colors"][0].intValue));
               list[i].stackedBarLabels.append(json["dataSets"][j]["label"].stringValue);
           }
-          if json["dataSets"][0]["drawValues"].isExists(){
+          if json["dataSets"][0]["drawValues"].exists(){
               list[i].drawValues = json["dataSets"][0]["drawValues"].boolValue;
           }
-          if json["dataSets"][0]["valueTextColor"].isExists(){
-              list[i].valueTextColor = RCTConvert.UIColor(json["dataSets"][0]["valueTextColor"].intValue);
+          if json["dataSets"][0]["valueTextColor"].exists(){
+              list[i].valueTextColor = RCTConvert.uiColor(json["dataSets"][0]["valueTextColor"].intValue);
           }
-          if json["dataSets"][0]["valueTextFontSize"].isExists(){
+          if json["dataSets"][0]["valueTextFontSize"].exists(){
               list[i].valueTextFontSize = json["dataSets"][0]["valueTextFontSize"].intValue;
           }
       }
@@ -128,7 +128,7 @@ class RNBarChart : BarChartView {
           dataSet.colors = stackedBarData.stackedBarColors;
           dataSet.drawValuesEnabled = stackedBarData.drawValues;
           dataSet.valueTextColor = stackedBarData.valueTextColor;
-          dataSet.valueFont = dataSet.valueFont.fontWithSize(CGFloat(stackedBarData.valueTextFontSize))
+          dataSet.valueFont = dataSet.valueFont.withSize(CGFloat(stackedBarData.valueTextFontSize))
       }
       sets.append(dataSet);
       

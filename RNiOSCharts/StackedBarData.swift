@@ -16,6 +16,6 @@ class StackedBarData{
     stackedBarLabels = [];
     drawValues = false;
     valueTextFontSize = 8;
-    valueTextColor = UIColor.blackColor();
+    valueTextColor = UIColor.black;
   }
 }

@@ -23,7 +23,7 @@ class RNLineChart : LineChartView {
         fatalError("init(coder:) has not been implemented");
     }
     
-    func setConfig(config: String!) {
+    func setConfig(_ config: String!) {
         self.descriptionText = "";
         
         setBarLineChartViewBaseProps(config);
@@ -31,43 +31,43 @@ class RNLineChart : LineChartView {
         var labels: [String] = [];
         
         var json: JSON = nil;
-        if let data = config.dataUsingEncoding(NSUTF8StringEncoding) {
+        if let data = config.data(using: String.Encoding.utf8) {
             json = JSON(data: data);
         };
         
-        if json["labels"].isExists() {
+        if json["labels"].exists() {
             labels = json["labels"].arrayObject as! [String];
         }
       
         self.data = getLineData(labels, json: json);
       
-        if json["drawMarkers"].isExists() {
+        if json["drawMarkers"].exists() {
           self.drawMarkers = json["drawMarkers"].boolValue;
         }
       
-        if json["scaleEnabled"].isExists() {
+        if json["scaleEnabled"].exists() {
           self.scaleXEnabled = json["scaleEnabled"].boolValue;
           self.scaleYEnabled = json["scaleEnabled"].boolValue;
         }
       
-        if json["touchEnabled"].isExists() {
-          self.userInteractionEnabled = json["touchEnabled"].boolValue;
+        if json["touchEnabled"].exists() {
+          self.isUserInteractionEnabled = json["touchEnabled"].boolValue;
         }
       
-        if json["xAxis"].isExists() && json["xAxis"]["labelsToSkip"].isExists(){
+        if json["xAxis"].exists() && json["xAxis"]["labelsToSkip"].exists(){
           self.xAxis.setLabelsToSkip(json["xAxis"]["labelsToSkip"].intValue);
         }
       
-        if json["leftAxis"].isExists() && json["leftAxis"]["unitLabel"].isExists(){
-          let unitFormatter = NSNumberFormatter();
-          unitFormatter.numberStyle = .NoStyle;
+        if json["leftAxis"].exists() && json["leftAxis"]["unitLabel"].exists(){
+          let unitFormatter = NumberFormatter();
+          unitFormatter.numberStyle = .none;
           unitFormatter.positiveFormat = "#" + json["leftAxis"]["unitLabel"].stringValue;
           self.leftAxis.valueFormatter = unitFormatter;
         }
       
-        if json["rightAxis"].isExists() && json["rightAxis"]["unitLabel"].isExists(){
-          let unitFormatter = NSNumberFormatter();
-          unitFormatter.numberStyle = .NoStyle;
+        if json["rightAxis"].exists() && json["rightAxis"]["unitLabel"].exists(){
+          let unitFormatter = NumberFormatter();
+          unitFormatter.numberStyle = .none;
           unitFormatter.positiveFormat = "#" + json["rightAxis"]["unitLabel"].stringValue;
           self.rightAxis.valueFormatter = unitFormatter;
         }
